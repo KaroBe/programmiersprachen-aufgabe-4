@@ -1,2 +1,2 @@
-# Build example
-add_executable(example example.cpp)
+# Build aufg_1
+add_executable(aufg_1 aufg_1.cpp)
