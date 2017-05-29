@@ -25,6 +25,9 @@ struct ListNode
 					m_next(next)
 					{}
 
+	//Destructor
+	~ListNode(){clear();}
+
 	//Member Variables
 	T m_value;
 	ListNode* m_prev;
@@ -35,12 +38,19 @@ struct ListNode
 template <typename T>
 struct ListIterator
 {
+	typedef ListIterator<T> Self;
+
+	typedef T value_pointer;
+	typedef T* pointer;
+	typedef T& reference;
+	typedef ptrdiff_t difference_type;
+	typedef std::forward_iterator_tag iterator_category;
+
 	friend class List<T>;
 
-public: //wird in Vorlage nicht so explizit hinge
-		//schrieben?
-
-	//not implemented yet
+	ListIterator () {}
+	ListIterator(ListNode<T>* n) {}
+	reference operator*()
 
 private:
 	//Pointer auf ListNode m_node, wird mit
@@ -139,6 +149,12 @@ public:
 		}
 
 		++ m_size;
+	};
+
+	void push_front(std::vector<value_type> const& values)
+	{
+		for (value_type value : values)
+			push_front(value);
 	};
 
 	//pushs element to back of list
@@ -247,16 +263,24 @@ public:
 	};
 	
 	//returns value of front element
-	value_type front()
+	value_type front() const
 	{
 		return m_first->m_value;
 	};
 	
 	//returns value of back element
-	value_type back()
+	value_type back() const
 	{
 		return m_last->m_value;
-	};
+	}
+
+	void clear()
+	{
+		while(!empty())
+			pop_front();
+	}
+
+
 
 private:
 	//std::size_t is type returned by sizeof()

@@ -32,6 +32,14 @@ TEST_CASE("add an element with push_front", "[modifiers]")
 	REQUIRE(11 == list.front());
 }
 
+TEST_CASE("add multiple elements with push_front", "[modifiers]")
+{
+	List<int> list;
+	list.push_front(std::vector<int>{1,2,3});
+	REQUIRE(3 == list.front());
+	REQUIRE(1 == list.back());
+}
+
 TEST_CASE("add an element with push_back", "[modifiers]")
 {
 	List<int> list;
@@ -75,6 +83,16 @@ TEST_CASE("remove an element with pop_back", "[modifiers]")
 
 	list.pop_back();
 	REQUIRE(list.size() == 0);
+}
+
+
+TEST_CASE("clear list", "[modifiers]")
+{
+	List<int> list;
+	list.push_front(std::vector<int>{1,2,3});
+	REQUIRE(3 == list.size());
+	list.clear();
+	REQUIRE(list.empty());
 }
 
 int main(int argc, char* argv[])
