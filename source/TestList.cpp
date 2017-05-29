@@ -58,15 +58,24 @@ TEST_CASE("remove an element with pop_front", "[modifiers]")
 	REQUIRE(list.size() == 0);
 }
 
-/*
 TEST_CASE("remove an element with pop_back", "[modifiers]")
 {
 	List<int> list;
-	list.push_back(42);
+	list.push_front(42);
+	REQUIRE(42 == list.front());
+	REQUIRE(42 == list.back());
+	
+	list.push_front(12);
+
+	REQUIRE(12 == list.front());
+	REQUIRE(42 == list.back());
+
 	list.pop_back();
-	REQUIRE(list.empty());
+	REQUIRE(12 == list.front());
+
+	list.pop_back();
+	REQUIRE(list.size() == 0);
 }
-*/
 
 int main(int argc, char* argv[])
 {

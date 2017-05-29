@@ -212,18 +212,38 @@ public:
 	//removes front element of list and returns
 	//it's value
 	value_type pop_back()
-	{	/*	
-		ListNode<T>* former_last = m_last;
-		m_last = former_last->m_prev;
-		m_last->m_next = nullptr;
+	{
+		//List empty
+		if (m_size == 0)
+		{
+			//ERROR???
+		}
+		//List has one element
+		else if (m_size == 1)
+		{
+			return pop_front();	
+		}
+		//List has multiple elements
+		else
+		{				
+			//erstes element zwischenspeichern
+			ListNode<T>* former_last = m_last;
+			
+			//front zeigt auf das element auf das next
+			//des ehm. front auch zeigt
+			m_last = former_last->m_prev;
 
-		value_type temp = former_last->m_value;
-		delete former_last;
-		former_last = nullptr;
+			//das prev element von front wird auf nullptr umgebogen
+			m_last->m_next = nullptr;
 
-		-- m_size;
-		return temp;
-		*/
+			/*
+			delete former_first;
+			former_first = nullptr;
+			*/
+
+			-- m_size;
+			return former_last->m_value;
+		}
 	};
 	
 	//returns value of front element
