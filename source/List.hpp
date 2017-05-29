@@ -7,7 +7,7 @@
 
 //Deklaration des struct List
 template <typename T>
-struct List;
+class List;
 
 //Definition des struct ListNode
 template <typename T>
@@ -65,6 +65,8 @@ template<typename T>
 class List
 {
 public:
+
+	//set aliases for data types
 	typedef T value_type;
 
 	typedef T* pointer;
@@ -76,6 +78,7 @@ public:
 	typedef ListIterator<T> iterator;
 	typedef ListConstIterator<T> const_iterator;
 
+	//fried classes
 	friend class ListIterator<T>;
 	friend class ListConstIterator<T>;
 
@@ -97,7 +100,95 @@ public:
 		return m_size;
 	};
 
-	//other functions are not implemented yet
+	//pushs element to front of list
+	void push_front(value_type value)
+	{
+		//List empty
+		if (m_size == 0)
+		{
+			//m_first zeigt auf das neue element
+			m_first = new ListNode<T>{
+				value, 		//T
+				nullptr, 	//pointer auf prev
+				nullptr 	//pointer auf next
+			};
+
+			//m_first und m_last zeigen auf das
+			//einzige Element der Liste
+			m_last = m_first;
+		}
+
+		//List not empty
+		else
+		{
+			//former_first und m_first referenzieren
+			//den front node
+			ListNode<T>* former_first = m_first;
+
+			//ListNode<T>* m_first referenziert den
+			//neuen front node, dessen next der former_
+			m_first = new ListNode<T>{
+				value, 			//T
+				nullptr, 		//pointer auf prev
+				former_first 	//pointer auf next
+			};
+
+			//prev pointer des 2. elements
+			//zeigt jetzt auf das front element
+			former_first->m_prev = m_first;
+		}
+
+		++ m_size;
+	};
+
+	//pushs element to back of list
+	void push_back(value_type value)
+	{
+		//List empty
+		if (m_size == 0)
+		{
+			push_front(value);
+		}
+
+		//List not empty
+		else
+		{
+			ListNode<T>* former_last = m_last;
+
+			m_last = new ListNode<T>{
+				value, former_last, nullptr};
+
+			former_last->m_next = m_last;
+		}
+
+		++ m_size;
+	};
+
+	//removes front element of list and returns
+	//it's value
+	value_type pop_front()
+	{
+
+	};
+	
+	//removes front element of list and returns
+	//it's value
+	value_type pop_back()
+	{
+
+	};
+	
+	//returns value of front element
+	value_type front()
+	{
+		return m_first->m_value;
+	};
+	
+	//returns value of back element
+	value_type back()
+	{
+		return m_last->m_value;
+	};
 
 private:
 	//std::size_t is type returned by sizeof()

@@ -4,7 +4,7 @@
 
 #include "List.hpp"
 
-// AUFGABE 4.1
+// AUFGABE 4.2
 
 TEST_CASE("empty", "[List]")
 {
@@ -23,8 +23,21 @@ TEST_CASE("size", "[List]")
 	REQUIRE(0 == l1.size());
 }
 
-// AUFGABE4.2
+// AUFGABE4.3
 
+TEST_CASE("add an element with push_front", "[modifiers]")
+{
+	List<int> list;
+	list.push_front(11);
+	REQUIRE(11 == list.front());
+}
+
+TEST_CASE("add an element with push_back", "[modifiers]")
+{
+	List<int> list;
+	list.push_back(42);
+	REQUIRE(42 == list.back());
+}
 
 int main(int argc, char* argv[])
 {
