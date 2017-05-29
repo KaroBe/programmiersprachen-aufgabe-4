@@ -39,6 +39,35 @@ TEST_CASE("add an element with push_back", "[modifiers]")
 	REQUIRE(42 == list.back());
 }
 
+TEST_CASE("remove an element with pop_front", "[modifiers]")
+{
+	List<int> list;
+	list.push_front(42);
+	REQUIRE(42 == list.front());
+	REQUIRE(42 == list.back());
+	
+	list.push_front(12);
+
+	REQUIRE(12 == list.front());
+	REQUIRE(42 == list.back());
+
+	list.pop_front();
+	REQUIRE(42 == list.front());
+
+	list.pop_front();
+	REQUIRE(list.size() == 0);
+}
+
+/*
+TEST_CASE("remove an element with pop_back", "[modifiers]")
+{
+	List<int> list;
+	list.push_back(42);
+	list.pop_back();
+	REQUIRE(list.empty());
+}
+*/
+
 int main(int argc, char* argv[])
 {
 	return Catch::Session().run(argc, argv);
