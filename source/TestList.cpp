@@ -117,7 +117,7 @@ TEST_CASE("iterator initializations", "[ListIterator]")
 	REQUIRE(*it_end == 1);
 }
 
-TEST_CASE("iterator initializations", "[ListIterator]")
+TEST_CASE("operator-> test", "[ListIterator]")
 {
 	List<int> list;
 	list.push_front(std::vector<int>{1,2,3});
@@ -130,9 +130,14 @@ TEST_CASE("iterator initializations", "[ListIterator]")
 TEST_CASE("should be a empty range after default construction", "[iterators]")
 {
 	List<int> list;
+	
 	auto b = list.begin();
 	auto e = list.end();
 	REQUIRE(b == e);
+
+	list.push_front(5);
+	e = list.end();
+	REQUIRE(b != e);
 }
 
 TEST_CASE("provide access to the first element with begin", "[iterators]")

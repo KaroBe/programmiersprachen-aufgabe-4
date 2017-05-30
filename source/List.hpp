@@ -51,13 +51,19 @@ struct ListIterator
 
 	//dereference iterator, return data stored in node
 	//by reference (not by value!)
-	reference operator*() const {return m_node->m_value;}
+	reference operator*() const
+	{
+		return m_node->m_value;
+	}
 
 	//dereference iterator, return pointer to
 	//data stored in node
 	//T* *m_node->m_value
 	//****NOT WORKING****
-	pointer operator->() const {return *m_node->m_value;}
+	pointer operator->() const
+	{
+		return *m_node->m_value;
+	}
 
 	// returns reference to ListIterator<T>
 	// increment iterator
@@ -80,18 +86,17 @@ struct ListIterator
 		return *this;
 	}
 
-	// this == x ?
-	//komische Schreibweise? Inkonsequente Schreibweise?
-	// eher Self const& x
+	//compares, wheter the iterators point
+	//TO THE SAME NODE not if they contain the
+	//the same value
 	bool operator==(const Self& x) const 
 	{
-		return m_node->m_value == x->m_node->m_value;
-		//return this-> m_node->m_value ... ?
+		return m_node == x.m_node;
 	}
 
 	bool operator!=(const Self& x) const
 	{
-		return !(*this == x);
+		return m_node != x.m_node;
 	}
 
 	//get next node
