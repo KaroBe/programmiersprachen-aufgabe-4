@@ -25,9 +25,6 @@ struct ListNode
 					m_next(next)
 					{}
 
-	//Destructor
-	~ListNode(){clear();}
-
 	//Member Variables
 	T m_value;
 	ListNode* m_prev;
@@ -48,13 +45,68 @@ struct ListIterator
 
 	friend class List<T>;
 
+	//Construktoren
 	ListIterator () {}
-	ListIterator(ListNode<T>* n) {}
-	reference operator*()
+	ListIterator(ListNode<T>* n){m_node = n;}
 
-private:
+	//dereference iterator, return data stored in node
+	//by reference (not by value!)
+	reference operator*() const {return m_node->m_value;}
+
+	//dereference iterator, return pointer to
+	//data stored in node
+	//T* *m_node->m_value
+	//****NOT WORKING****
+	pointer operator->() const {return *m_node->m_value;}
+
+	// returns reference to ListIterator<T>
+	// increment iterator
+	Self& operator++()
+	{
+		//next() returns new ListIterator
+		//assign the new ListIterator to myself (copy the values
+		//of the new ListIterator into myself)
+		*this = next();
+
+		//return myself by reference
+		//(NOT pointer to myself by reference)
+		return *this;
+	}
+
+	// returns reference to ListIterator<value_pointer>
+	Self& operator++(int counter)
+	{
+		for (; counter > 0; ++counter){*this++;}
+		return *this;
+	}
+
+	// this == x ?
+	//komische Schreibweise? Inkonsequente Schreibweise?
+	// eher Self const& x
+	bool operator==(const Self& x) const 
+	{
+		return m_node->m_value == x->m_node->m_value;
+		//return this-> m_node->m_value ... ?
+	}
+
+	bool operator!=(const Self& x) const
+	{
+		return !(*this == x);
+	}
+
+	//get next node
+	Self next() const
+	{
+		if(m_node)
+			return ListIterator(m_node->m_next);
+		else
+			return ListIterator(nullptr);
+	}
+
+ private:
 	//Pointer auf ListNode m_node, wird mit
 	//nullpointer initialisiert
+	//The Node the iterator is pointing to:
 	ListNode<T>* m_node = nullptr;
 };
 
@@ -64,17 +116,17 @@ struct ListConstIterator
 {
 	friend class List<T>;
 	
-public:
+ public:
 	//not implemented yet
 
-private:
+ private:
 	ListNode<T>* m_node = nullptr;
 };
 
 template<typename T>
 class List
 {
-public:
+ public:
 
 	//set aliases for data types
 	typedef T value_type;
@@ -98,17 +150,21 @@ public:
 				m_last{nullptr}
 				{}
 
+
+	//Destructor
+	~List(){clear();}
+
 	//returns whether list is empty
 	bool empty() const
 	{
 		return m_size == 0;
-	};
+	}
 
 	//returns number of nodes in list
 	std::size_t size() const
 	{
 		return m_size;
-	};
+	}
 
 	//pushs element to front of list
 	void push_front(value_type value)
@@ -149,13 +205,13 @@ public:
 		}
 
 		++ m_size;
-	};
+	}
 
 	void push_front(std::vector<value_type> const& values)
 	{
 		for (value_type value : values)
 			push_front(value);
-	};
+	}
 
 	//pushs element to back of list
 	void push_back(value_type value)
@@ -175,10 +231,10 @@ public:
 				value, former_last, nullptr};
 
 			former_last->m_next = m_last;
-		}
 
-		++ m_size;
-	};
+			++ m_size;
+		}
+	}
 
 	//removes front element of list and returns
 	//it's value
@@ -223,7 +279,7 @@ public:
 			-- m_size;
 			return former_first->m_value;
 		}
-	};
+	}
 	
 	//removes front element of list and returns
 	//it's value
@@ -260,13 +316,13 @@ public:
 			-- m_size;
 			return former_last->m_value;
 		}
-	};
+	}
 	
 	//returns value of front element
 	value_type front() const
 	{
 		return m_first->m_value;
-	};
+	}
 	
 	//returns value of back element
 	value_type back() const
@@ -280,9 +336,23 @@ public:
 			pop_front();
 	}
 
+	ListIterator<T> begin ()
+	{
+		if (m_first)
+			return ListIterator<T>(m_first);
+		else
+			return ListIterator<T>(nullptr);
+	}
 
+	ListIterator<T> end ()
+	{
+		if (m_last)
+			return ListIterator<T>(m_last);
+		else
+			return ListIterator<T>(nullptr);
+	}
 
-private:
+ private:
 	//std::size_t is type returned by sizeof()
 	//functions
 	//initializes m_size with 0

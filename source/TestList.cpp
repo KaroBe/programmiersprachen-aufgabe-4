@@ -85,6 +85,7 @@ TEST_CASE("remove an element with pop_back", "[modifiers]")
 	REQUIRE(list.size() == 0);
 }
 
+// AUFGABE 4.4
 
 TEST_CASE("clear list", "[modifiers]")
 {
@@ -94,6 +95,53 @@ TEST_CASE("clear list", "[modifiers]")
 	list.clear();
 	REQUIRE(list.empty());
 }
+
+// AUFGABE 4.5 und 4.6
+
+TEST_CASE("iterator initializations", "[ListIterator]")
+{
+	List<int> list;
+	list.push_front(std::vector<int>{1,2,3});
+	
+	ListIterator<int> it {};
+	it = list.begin();
+	REQUIRE(*it == 3);
+
+	auto auto_it = list.begin();
+	REQUIRE(*auto_it == 3);
+
+	ListIterator<int> it_begin {list.begin()};
+	REQUIRE(*it_begin == 3);
+
+	ListIterator<int> it_end {list.end()};
+	REQUIRE(*it_end == 1);
+}
+
+TEST_CASE("iterator initializations", "[ListIterator]")
+{
+	List<int> list;
+	list.push_front(std::vector<int>{1,2,3});
+
+	auto it = list.begin();
+
+	//int* value = it->;
+}
+
+TEST_CASE("should be a empty range after default construction", "[iterators]")
+{
+	List<int> list;
+	auto b = list.begin();
+	auto e = list.end();
+	REQUIRE(b == e);
+}
+
+TEST_CASE("provide access to the first element with begin", "[iterators]")
+{
+	List<int> list;
+	list.push_front(42);
+	REQUIRE(42 == *list.begin());
+}
+
 
 int main(int argc, char* argv[])
 {
