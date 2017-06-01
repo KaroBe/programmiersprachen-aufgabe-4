@@ -57,13 +57,11 @@ struct ListIterator
 		return m_node->m_value;
 	}
 
-	//dereference iterator, return pointer to
-	//data stored in node
-	//T* *m_node->m_value
-	//****NOT WORKING****
+	//dereference operator, return pointer to data stored in
+	//node ???
 	pointer operator->() const
 	{
-		return *m_node->m_value;
+		return *m_node;
 	}
 
 	// returns reference to ListIterator<T>
@@ -156,6 +154,18 @@ class List
 				m_last{nullptr}
 				{}
 
+/*
+	//copy-Constructor
+	List(List<T> const& x) : m_size{0},
+				m_first{nullptr},
+				m_last{nullptr}
+	{
+		auto it = x.begin();
+		while(it)
+		{
+
+		}
+	} */
 
 	//Destructor
 	~List(){clear();}

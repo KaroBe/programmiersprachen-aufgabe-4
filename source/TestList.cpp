@@ -124,7 +124,9 @@ TEST_CASE("operator-> test", "[ListIterator]")
 
 	auto it = list.begin();
 
-	//int* value = it->;
+	ListIterator<int> nextNode = it.next();
+	ListNode<int> notherNode = *it.m_next;
+
 }
 
 TEST_CASE("should be a empty range after default construction", "[iterators]")
