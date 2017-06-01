@@ -56,7 +56,7 @@ struct ListIterator
 
 	//Construktoren
 	ListIterator () {}
-	ListIterator(ListNode<T>* n){m_node = n;}
+	ListIterator(ListNode<T>* n) : m_node(n) {}
 
 	
 
@@ -382,6 +382,23 @@ class List
 		else
 			return iterator(nullptr);
 	}
+
+	void insert (iterator it, const_reference obj)
+	{
+		// fetch
+		ListNode<T>* old = it.m_node;
+		ListNode<T>* prev = it.m_node.m_prev;
+		ListNode<T>* next = it.m_node.m_next;
+
+		ListNode<T> new_node (obj, prev, old);
+
+		prev->m_next = new_node;
+
+		old->m_prev = new_node;
+
+		++ m_size;
+	}
+
 
  private:
 	//std::size_t is type returned by sizeof()
