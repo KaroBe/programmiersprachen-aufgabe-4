@@ -3,6 +3,7 @@
 #include <catch.hpp>
 
 #include "List.hpp"
+#include <tuple>
 
 // AUFGABE 4.2
 
@@ -119,13 +120,18 @@ TEST_CASE("iterator initializations", "[ListIterator]")
 
 TEST_CASE("operator-> test", "[ListIterator]")
 {
-	List<int> list;
-	list.push_front(std::vector<int>{1,2,3});
+	List<Circle> circle_list;
+	circle_list.push_back(Circle{5});
+	circle_list.push_back(Circle{6});
+	circle_list.push_back(Circle{7});
 
-	auto it = list.begin();
+	auto it2 = circle_list.begin();
 
-	ListIterator<int> nextNode = it.next();
-	ListNode<int> notherNode = *it.m_next;
+	int x = it2->m_radius;
+	REQUIRE(x == 5);
+	
+	it2->warp();
+	REQUIRE(it2->m_radius == 0);
 
 }
 

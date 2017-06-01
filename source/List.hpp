@@ -5,6 +5,14 @@
 
 // List.hpp
 
+//Simple Circle for testing
+struct Circle
+{
+	Circle (int radius) : m_radius(radius) {};
+	int m_radius;
+	void warp () {m_radius = 0;}
+};
+
 //Deklaration des struct List
 template <typename T>
 class List;
@@ -61,7 +69,7 @@ struct ListIterator
 	//node ???
 	pointer operator->() const
 	{
-		return *m_node;
+		return &(m_node->m_value);
 	}
 
 	// returns reference to ListIterator<T>
@@ -154,18 +162,18 @@ class List
 				m_last{nullptr}
 				{}
 
-/*
 	//copy-Constructor
 	List(List<T> const& x) : m_size{0},
 				m_first{nullptr},
 				m_last{nullptr}
 	{
 		auto it = x.begin();
-		while(it)
+		while(it->m_node)
 		{
-
+			push_back(it->m_node->m_value);
+			++it;
 		}
-	} */
+	}
 
 	//Destructor
 	~List(){clear();}
