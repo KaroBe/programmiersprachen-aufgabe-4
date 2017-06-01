@@ -43,6 +43,7 @@ struct ListIterator
 	typedef ptrdiff_t difference_type;
 	typedef std::forward_iterator_tag iterator_category;
 
+	//grants access to private member variables of friend class List
 	friend class List<T>;
 
 	//Construktoren
@@ -341,7 +342,7 @@ class List
 			pop_front();
 	}
 
-	ListIterator<T> begin ()
+	ListIterator<T> begin () const
 	{
 		if (m_first)
 			return ListIterator<T>(m_first);
@@ -349,7 +350,7 @@ class List
 			return ListIterator<T>(nullptr);
 	}
 
-	ListIterator<T> end ()
+	ListIterator<T> end () const
 	{
 		if (m_last)
 			return ListIterator<T>(m_last);
@@ -367,5 +368,36 @@ class List
 	ListNode<T>* m_first = nullptr;
 	ListNode<T>* m_last = nullptr;
 };
+
+template<typename T>
+bool operator==(List<T> const& xs, List<T> const& ys)
+{
+	if(xs.size() == ys.size())
+	{
+		//compare each element
+		auto it_xs = xs.begin();
+		auto it_ys = ys.begin();
+
+		//while it_xs is not a nullpointer(end of list)
+		//check, whether the node data is equal
+		while(it_xs != nullptr)
+		{
+			//compare
+			if(*it_xs != *it_ys)
+				return false;
+			++it_xs;
+			++it_ys;
+		}
+		return true;
+	}
+	else
+		return false;
+}
+
+template<typename T>
+bool operator!=(List<T> const& xs, List<T> const& ys)
+{
+	return !(xs==ys);
+}
 
 #endif //#define BUW_LIST_HPP

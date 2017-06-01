@@ -147,6 +147,22 @@ TEST_CASE("provide access to the first element with begin", "[iterators]")
 	REQUIRE(42 == *list.begin());
 }
 
+// AUFGABE 4.7
+
+TEST_CASE ("== and != operator", "[list comparison]")
+{
+	List<int> list1;
+	list1.push_front(42);
+	
+	List<int> list2;
+	list2.push_front(42);
+	
+	List<int> list3;
+	list3.push_front(24);
+
+	REQUIRE((list1 == list2) == true);
+	REQUIRE((list1 != list3) == true);
+}
 
 int main(int argc, char* argv[])
 {
