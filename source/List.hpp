@@ -58,6 +58,8 @@ struct ListIterator
 	ListIterator () {}
 	ListIterator(ListNode<T>* n){m_node = n;}
 
+	
+
 	//dereference iterator, return data stored in node
 	//by reference (not by value!)
 	reference operator*() const
@@ -106,7 +108,7 @@ struct ListIterator
 		return m_node != x.m_node;
 	}
 
-	//get next node
+	//return next node
 	Self next() const
 	{
 		if(m_node)
@@ -365,20 +367,20 @@ class List
 			pop_front();
 	}
 
-	ListIterator<T> begin () const
+	iterator begin () const
 	{
 		if (m_first)
-			return ListIterator<T>(m_first);
+			return iterator(m_first);
 		else
-			return ListIterator<T>(nullptr);
+			return iterator(nullptr);
 	}
 
-	ListIterator<T> end () const
+	iterator end () const
 	{
 		if (m_last)
-			return ListIterator<T>(m_last);
+			return iterator(m_last);
 		else
-			return ListIterator<T>(nullptr);
+			return iterator(nullptr);
 	}
 
  private:
