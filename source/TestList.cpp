@@ -35,10 +35,9 @@ TEST_CASE("add an element with push_front", "[modifiers]")
 
 TEST_CASE("add multiple elements with push_front", "[modifiers]")
 {
-	List<int> list;
-	list.push_front(std::vector<int>{1,2,3});
-	REQUIRE(3 == list.front());
-	REQUIRE(1 == list.back());
+	List<int> list(std::vector<int>{1,2,3});
+	REQUIRE(1 == list.front());
+	REQUIRE(3 == list.back());
 }
 
 TEST_CASE("add an element with push_back", "[modifiers]")
@@ -90,8 +89,7 @@ TEST_CASE("remove an element with pop_back", "[modifiers]")
 
 TEST_CASE("clear list", "[modifiers]")
 {
-	List<int> list;
-	list.push_front(std::vector<int>{1,2,3});
+	List<int> list (std::vector<int>{1,2,3});
 	REQUIRE(3 == list.size());
 	list.clear();
 	REQUIRE(list.empty());
@@ -101,21 +99,20 @@ TEST_CASE("clear list", "[modifiers]")
 
 TEST_CASE("iterator initializations", "[ListIterator]")
 {
-	List<int> list;
-	list.push_front(std::vector<int>{1,2,3});
+	List<int> list (std::vector<int>{1,2,3});
 	
 	ListIterator<int> it {};
 	it = list.begin();
-	REQUIRE(*it == 3);
+	REQUIRE(*it == 1);
 
 	auto auto_it = list.begin();
-	REQUIRE(*auto_it == 3);
+	REQUIRE(*auto_it == 1);
 
 	ListIterator<int> it_begin {list.begin()};
-	REQUIRE(*it_begin == 3);
+	REQUIRE(*it_begin == 1);
 
 	ListIterator<int> it_end {list.end()};
-	REQUIRE(*it_end == 1);
+	REQUIRE(*it_end == 3);
 }
 
 TEST_CASE("operator-> test", "[ListIterator]")
@@ -129,7 +126,7 @@ TEST_CASE("operator-> test", "[ListIterator]")
 
 	int x = it2->m_radius;
 	REQUIRE(x == 5);
-	
+
 	it2->warp();
 	REQUIRE(it2->m_radius == 0);
 
@@ -168,8 +165,18 @@ TEST_CASE ("== and != operator", "[list comparison]")
 	List<int> list3;
 	list3.push_front(24);
 
-	REQUIRE((list1 == list2) == true);
-	REQUIRE((list1 != list3) == true);
+	REQUIRE(list1 == list2);
+	REQUIRE(list1 != list3);
+}
+
+// AUFGABE 4.8
+
+TEST_CASE ("copy construction of list", "[constructor]")
+{
+	List<int> list (std::vector<int> {1,2,3});
+	List<int> copy_list {list};
+	REQUIRE(list == copy_list);
+
 }
 
 int main(int argc, char* argv[])

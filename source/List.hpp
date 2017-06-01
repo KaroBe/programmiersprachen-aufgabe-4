@@ -162,15 +162,26 @@ class List
 				m_last{nullptr}
 				{}
 
+	//Construct from vector
+
+	List(std::vector<value_type> const& values) :
+				m_size{0},
+				m_first{nullptr},
+				m_last{nullptr}
+	{
+		for (value_type value : values)
+			push_back(value);
+	}
+
 	//copy-Constructor
 	List(List<T> const& x) : m_size{0},
 				m_first{nullptr},
 				m_last{nullptr}
 	{
 		auto it = x.begin();
-		while(it->m_node)
+		while(it != nullptr)
 		{
-			push_back(it->m_node->m_value);
+			push_back(*it);
 			++it;
 		}
 	}
@@ -229,12 +240,6 @@ class List
 		}
 
 		++ m_size;
-	}
-
-	void push_front(std::vector<value_type> const& values)
-	{
-		for (value_type value : values)
-			push_front(value);
 	}
 
 	//pushs element to back of list
