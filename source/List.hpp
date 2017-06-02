@@ -383,20 +383,49 @@ class List
 			return iterator(nullptr);
 	}
 
-	void insert (iterator it, const_reference obj)
+	void insert (iterator it, const T& obj)
 	{
-		// fetch
+		//old hält iteratornode
 		ListNode<T>* old = it.m_node;
-		ListNode<T>* prev = it.m_node.m_prev;
-		ListNode<T>* next = it.m_node.m_next;
 
-		ListNode<T> new_node (obj, prev, old);
+		//Wenn begin oder leere Liste
+		if (it == this->begin() or it == nullptr)
+		{
+			push_front(obj);
+		}
+		
+		//wenn end
+		else if (it == this->end())
+		{
+			push_back(obj);
+		}
 
-		prev->m_next = new_node;
+		//wenn mitte irgendwo
+		else
+		{
+			ListNode<T>* prev = it.m_node->m_prev;
+			ListNode<T>* next = it.m_node->m_next;
 
-		old->m_prev = new_node;
+			//ListNode ohne Zeiger auf Liste
+			//mit neuem Inhalt
+			ListNode<T>* insert_node = new ListNode<T>{
+				obj, 		//T
+				nullptr, 	//pointer auf prev und
+				nullptr		//pointer auf next mit nullptr initialisieren
+			};
 
-		++ m_size;
+			ListNode<T>* insert = insert_node;
+
+			//Zeiger zw. neuem und altem element
+			old->m_prev = insert;
+			insert->m_next = old;
+
+			//Zeiger zwischen prev element und insert
+			prev->m_next = insert;
+			insert->m_prev = prev;
+
+			++ m_size;
+		}
 	}
 
 

@@ -179,6 +179,19 @@ TEST_CASE ("copy construction of list", "[constructor]")
 
 }
 
+// AUFGABE 4.9
+
+TEST_CASE ("insert method", "[list]")
+{
+	List<int> list (std::vector<int> {1,2,3});
+	auto it = list.begin();
+	list.insert(it,5);
+	REQUIRE(*list.begin() == 5);
+	REQUIRE(*it == 1);
+	++it;
+	REQUIRE(*it == 2);
+}
+
 int main(int argc, char* argv[])
 {
 	return Catch::Session().run(argc, argv);
