@@ -176,7 +176,6 @@ TEST_CASE ("copy construction of list", "[constructor]")
 	List<int> list (std::vector<int> {1,2,3});
 	List<int> copy_list {list};
 	REQUIRE(list == copy_list);
-
 }
 
 // AUFGABE 4.9
@@ -190,6 +189,22 @@ TEST_CASE ("insert method", "[list]")
 	REQUIRE(*it == 1);
 	++it;
 	REQUIRE(*it == 2);
+}
+
+// AUFGABE 4.10
+
+TEST_CASE ("reverse method","[list]")
+{
+	List<int> list (std::vector<int> {1,2,3});
+
+	std::cout << "size: " << list.size() << "\n";
+	list.reverse();
+	REQUIRE(*list.begin() == 3);
+
+	/*
+	reverse(list);
+	REQUIRE(*list.begin() == 1);
+	*/
 }
 
 int main(int argc, char* argv[])

@@ -88,10 +88,29 @@ struct ListIterator
 		return *this;
 	}
 
+	Self& operator--()
+	{
+		//next() returns new ListIterator
+		//assign the new ListIterator to myself (copy the values
+		//of the new ListIterator into myself)
+		*this = prev();
+
+		//return myself by reference
+		//(NOT pointer to myself by reference)
+		return *this;
+	}
+
 	// returns reference to ListIterator<value_pointer>
 	Self& operator++(int counter)
 	{
 		for (; counter > 0; ++counter){*this++;}
+		return *this;
+	}
+
+	// returns reference to ListIterator<value_pointer>
+	Self& operator--(int counter)
+	{
+		for (; counter > 0; ++counter){*this--;}
 		return *this;
 	}
 
@@ -113,6 +132,15 @@ struct ListIterator
 	{
 		if(m_node)
 			return ListIterator(m_node->m_next);
+		else
+			return ListIterator(nullptr);
+	}
+
+	//return next node
+	Self prev() const
+	{
+		if(m_node)
+			return ListIterator(m_node->m_prev);
 		else
 			return ListIterator(nullptr);
 	}
@@ -175,6 +203,17 @@ class List
 			push_back(value);
 	}
 
+	List(int size) :
+				m_size{0},
+				m_first{nullptr},
+				m_last{nullptr}
+	{
+		for (int i = 0; i<size; ++i)
+		{
+			push_back(0);
+		}
+	}
+
 	//copy-Constructor
 	List(List<T> const& x) : m_size{0},
 				m_first{nullptr},
@@ -190,6 +229,19 @@ class List
 
 	//Destructor
 	~List(){clear();}
+
+	//Zuweisungsopertor
+	List& operator=(List rhs)
+	{
+		swap(rhs);
+		return *this;
+	}
+
+	void swap(List & rhs)
+	{
+		std::swap(m_first, rhs.m_first);
+		std::swap(m_last, rhs.m_last);
+	}
 
 	//returns whether list is empty
 	bool empty() const
@@ -383,6 +435,22 @@ class List
 			return iterator(nullptr);
 	}
 
+	iterator rbegin () const
+	{
+		if (m_last)
+			return iterator(m_last);
+		else
+			return iterator(nullptr);
+	}
+
+	iterator rend () const
+	{
+		if (m_first)
+			return iterator(m_first);
+		else
+			return iterator(nullptr);
+	}
+
 	void insert (iterator it, const T& obj)
 	{
 		//old hält iteratornode
@@ -428,6 +496,47 @@ class List
 		}
 	}
 
+	void reverse ()
+	{
+		//temp Liste mit gleicher Groesse
+		int x = size();
+		List<T> temp{x};
+		temp.print();
+
+		//Iterator auf erstes this element, und auf letztes temp el
+		iterator first = this->begin();
+		iterator second = temp.end();
+		
+		while(first != nullptr)
+		{
+			std::cout << *second << "=" << *first << "\n";
+			*second = *first;
+			std::cout << *second << "=" << *first << "\n";
+
+			++first;
+			--second;
+		}
+
+		std::cout << "this: ";
+		print();
+
+		std::cout << "\ntemp:";
+		temp.print();
+
+		this->m_first = temp.m_first;
+		this->m_last = temp.m_last;
+	}
+
+	void print () const
+	{
+		auto it = this->begin();
+		while(it != nullptr)
+		{
+			std::cout << *it << " ";
+			++it;
+		}
+		std::cout << "\n";
+	}
 
  private:
 	//std::size_t is type returned by sizeof()
@@ -463,6 +572,12 @@ bool operator==(List<T> const& xs, List<T> const& ys)
 	}
 	else
 		return false;
+}
+
+template<typename T>
+List<T> reverse (List<T> const& list)
+{
+	
 }
 
 template<typename T>
