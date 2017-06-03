@@ -523,8 +523,7 @@ class List
 		std::cout << "\ntemp:";
 		temp.print();
 
-		this->m_first = temp.m_first;
-		this->m_last = temp.m_last;
+		*this = temp;
 	}
 
 	void print () const
