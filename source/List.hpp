@@ -488,22 +488,30 @@ class List
 
 	void reverse ()
 	{
-		//temp Liste mit gleicher Groesse
-		int x = size();
-		List<T> temp{x};
-
-		//Iterator auf erstes this element, und auf letztes temp el
-		iterator first = this->begin();
-		iterator second = temp.end();
-		
-		while(first != nullptr)
+		if (m_size > 1)
 		{
-			*second = *first;
-			++first;
-			--second;
-		}
+			//temp = Liste mit gleicher Groesse
+			int x = size();
+			List<T> temp{x};
 
-		*this = temp; 
+			//Iterator auf erstes this element, und auf letztes temp el
+			iterator first = this->begin();
+			iterator second = temp.begin();
+
+			for(int j = 1; j<x; ++j)
+			{
+				++second;
+			}
+			
+			for(int i = 0; i<x; ++i)
+			{
+				*second = *first;
+				--second;
+				++first;
+			}
+
+			*this = temp;
+		} 
 	}
 
 	void print () const

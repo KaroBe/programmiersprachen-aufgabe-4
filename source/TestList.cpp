@@ -217,14 +217,8 @@ TEST_CASE ("insert method", "[list]")
 	ListIterator<int> pos_mid = list.begin();
 	++pos_mid;
 	
-	std::cout << "vorher: \n";
-	list.print();
-	
 	list.insert(pos_mid,10);
 	
-	std::cout << "nachher: \n";
-	list.print();
-
 	REQUIRE(*pos_mid == 1);
 	--pos_mid;
 	REQUIRE(*pos_mid == 10);
@@ -241,10 +235,21 @@ TEST_CASE ("insert method", "[list]")
 
 TEST_CASE ("reverse method","[list]")
 {
-	List<int> list (std::vector<int> {1,2,3});
-
+	List<int> list (std::vector<int> {1,2,3,4,5});
+	
+	/*
+	std::cout << "vorher: ";
+	list.print();
+	std::cout << "\n";
+	*/
 	list.reverse();
-	REQUIRE(*list.begin() == 3);
+	/*
+	std::cout << "\n \n"<< "nachher: ";
+	list.print();
+	std::cout << "\n";
+	*/
+
+	REQUIRE(*list.begin() == 5);
 
 	/*
 	reverse(list);
@@ -253,22 +258,22 @@ TEST_CASE ("reverse method","[list]")
 }
 
 // AUFGABE 4.11
-
 TEST_CASE("std::copy with own iterator implementation", "[list]")
 {
 	List<int> list {std::vector<int> {1,2,3}};
 	int x = list.size();
 	List<int> target {x};
 
-	target.print();
-
 	std::copy(list.begin(), list.end(), target.begin());
 	
-	list.print();
-	
-	target.print();
-	
 	REQUIRE(list == target);
+ }
+
+ // AUFGABE 4.12
+
+ TEST_CASE("move_dings?","[Liste]")
+ {
+ 	//do stuff
  }
 
 int main(int argc, char* argv[])
