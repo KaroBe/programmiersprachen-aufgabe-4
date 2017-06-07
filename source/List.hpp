@@ -209,7 +209,6 @@ class List
 				{}
 
 	//Construct from vector
-
 	List(std::vector<value_type> const& values) :
 				m_size{0},
 				m_first{nullptr},
@@ -219,6 +218,8 @@ class List
 			push_back(value);
 	}
 
+	//construct list with size number of "0" entrys
+	// ONLY AVAILABLE FOR List<int>
 	List(int size) :
 				m_size{0},
 				m_first{nullptr},
@@ -241,6 +242,22 @@ class List
 			push_back(*it);
 			++it;
 		}
+	}
+
+	/*
+	move-constructor - used for rvalues
+	move contents from source to this instance pointing to first/last
+	element of new list, and by bending	pointers to first/last element
+	to nullptr
+	*/
+	List(List<T>&& source) :
+		m_first{source.m_first},
+		m_last{source.m_last},
+		m_size{source.size()}
+	{
+		source.m_first = nullptr; //source now empty
+		source.m_last = nullptr;
+		source.m_size = 0;
 	}
 
 	//Destructor

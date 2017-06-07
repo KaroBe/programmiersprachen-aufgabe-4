@@ -236,7 +236,6 @@ TEST_CASE ("insert method", "[list]")
 TEST_CASE ("reverse method","[list]")
 {
 	List<int> list (std::vector<int> {1,2,3,4,5});
-	
 	/*
 	std::cout << "vorher: ";
 	list.print();
@@ -250,9 +249,16 @@ TEST_CASE ("reverse method","[list]")
 	*/
 
 	REQUIRE(*list.begin() == 5);
-
 	List<int> newlist = reverse(list);
 	REQUIRE(*newlist.begin() == 1);
+
+	List<int> list2 (std::vector<int> {});
+	list2.reverse();
+	REQUIRE(list2.begin() == nullptr);
+
+	list2.push_front(1);
+	list2.reverse();
+	REQUIRE(*list2.begin() == 1);
 }
 
 // AUFGABE 4.11
@@ -269,9 +275,31 @@ TEST_CASE("std::copy with own iterator implementation", "[list]")
 
  // AUFGABE 4.12
 
- TEST_CASE("move_dings?","[Liste]")
+TEST_CASE("= operator", "list")
+{
+	List<int> listA {std::vector<int>{1,2,3}};
+	List<int> listB {std::vector<int>{4,5,6}};
+
+	listA = listB;
+	REQUIRE(*listA.begin() == 4);
+}
+
+// AUFGABE 4.13
+
+ TEST_CASE("move_constructor","[Liste]")
  {
- 	//do stuff
+ 	List<int> list {std::vector<int> {1,2,3,4}};
+ 	//verschiebt list inhalt in list2
+ 	List<int> list2(std::move(list));
+ 	
+ 	//list ist leer
+ 	REQUIRE(0 == list.size());
+ 	REQUIRE(list.empty());
+ 	REQUIRE(list.begin() == nullptr);
+
+ 	//list2 hat vier Elemente
+ 	REQUIRE(4 == list2.size());
+ 	REQUIRE(*list2.begin() == 1);
  }
 
 int main(int argc, char* argv[])
