@@ -503,6 +503,7 @@ class List
 				++second;
 			}
 			
+			// GEHT EINFACHER ABER FUCK THAT ES IST HALB VIER.... >:(
 			for(int i = 0; i<x; ++i)
 			{
 				*second = *first;
@@ -564,7 +565,9 @@ bool operator==(List<T> const& xs, List<T> const& ys)
 template<typename T>
 List<T> reverse (List<T> const& list)
 {
-	
+	List<T> temp {list};
+	temp.reverse();
+	return temp;
 }
 
 template<typename T>

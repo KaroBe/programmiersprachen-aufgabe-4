@@ -251,10 +251,8 @@ TEST_CASE ("reverse method","[list]")
 
 	REQUIRE(*list.begin() == 5);
 
-	/*
-	reverse(list);
-	REQUIRE(*list.begin() == 1);
-	*/
+	List<int> newlist = reverse(list);
+	REQUIRE(*newlist.begin() == 1);
 }
 
 // AUFGABE 4.11
