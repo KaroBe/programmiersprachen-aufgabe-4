@@ -2,6 +2,9 @@
 #define BUW_LIST_HPP
 
 #include <cstddef>
+#include <iterator>
+#include <typeinfo>
+#include <iostream>
 
 // List.hpp
 
@@ -39,13 +42,15 @@ struct ListNode
 	ListNode* m_next;
 };
 
+
+
 //Definition des struct ListIterator
 template <typename T>
 struct ListIterator
 {
 	typedef ListIterator<T> Self;
 
-	typedef T value_pointer;
+	typedef T value_type;
 	typedef T* pointer;
 	typedef T& reference;
 	typedef ptrdiff_t difference_type;
@@ -55,10 +60,15 @@ struct ListIterator
 	friend class List<T>;
 
 	//Construktoren
-	ListIterator () {}
-	ListIterator(ListNode<T>* n) : m_node(n) {}
 
-	
+	//default
+	ListIterator () {}
+
+	//custom
+	ListIterator(ListNode<T>* n) : m_node(n) {}	
+
+	//copy
+	ListIterator(ListIterator<T> const& origin) : m_node(origin.m_node) {}
 
 	//dereference iterator, return data stored in node
 	//by reference (not by value!)
@@ -67,12 +77,12 @@ struct ListIterator
 		return m_node->m_value;
 	}
 
-	//dereference operator, return pointer to data stored in
-	//node ???
+	//Referenz auf m_value als pointer zurück
 	pointer operator->() const
 	{
 		return &(m_node->m_value);
 	}
+
 
 	// returns reference to ListIterator<T>
 	// increment iterator
@@ -88,6 +98,7 @@ struct ListIterator
 		return *this;
 	}
 
+	// DOES NOT WORK FOR list.end(); !!!
 	Self& operator--()
 	{
 		//next() returns new ListIterator
@@ -100,18 +111,23 @@ struct ListIterator
 		return *this;
 	}
 
+	// POST INCREMENT
 	// returns reference to ListIterator<value_pointer>
-	Self& operator++(int counter)
+	Self operator++(int)
 	{
-		for (; counter > 0; ++counter){*this++;}
-		return *this;
+		ListIterator<T> temp(*this);
+		operator++(); // PREFIX-INCREMENT of this instance
+		return temp; //returning the "old" this instance
 	}
 
+	// POST INCREMENT
+	// DOES NOT WORK FOR list.end(); !!!
 	// returns reference to ListIterator<value_pointer>
-	Self& operator--(int counter)
+	Self operator--(int)
 	{
-		for (; counter > 0; ++counter){*this--;}
-		return *this;
+		ListIterator<T> temp(*this);
+		operator--(); // PREFIX-INCREMENT of this instance
+		return temp; //returning the "old" this instance
 	}
 
 	//compares, wheter the iterators point
@@ -430,67 +446,41 @@ class List
 	iterator end () const
 	{
 		if (m_last)
-			return iterator(m_last);
-		else
-			return iterator(nullptr);
-	}
-
-	iterator rbegin () const
-	{
-		if (m_last)
-			return iterator(m_last);
-		else
-			return iterator(nullptr);
-	}
-
-	iterator rend () const
-	{
-		if (m_first)
-			return iterator(m_first);
+			return iterator(m_last->m_next);
 		else
 			return iterator(nullptr);
 	}
 
 	void insert (iterator it, const T& obj)
 	{
-		//old hält iteratornode
-		ListNode<T>* old = it.m_node;
 
-		//Wenn begin oder leere Liste
-		if (it == this->begin() or it == nullptr)
-		{
+		if (m_size == 0)
 			push_front(obj);
-		}
-		
-		//wenn end
-		else if (it == this->end())
-		{
-			push_back(obj);
-		}
 
-		//wenn mitte irgendwo
+		else if(it == begin())
+			push_front(obj);
+		
+		else if(it == end())
+			push_back(obj);
+		
 		else
 		{
-			ListNode<T>* prev = it.m_node->m_prev;
-			ListNode<T>* next = it.m_node->m_next;
+			//old hält iteratornode
+			ListNode<T>* old = it.m_node;
 
-			//ListNode ohne Zeiger auf Liste
-			//mit neuem Inhalt
-			ListNode<T>* insert_node = new ListNode<T>{
+			ListNode<T>* prev = it.m_node->m_prev;
+
+			ListNode<T>* insert = new ListNode<T>{
 				obj, 		//T
-				nullptr, 	//pointer auf prev und
-				nullptr		//pointer auf next mit nullptr initialisieren
+				prev, 	//pointer auf prev und
+				old		//pointer auf next mit nullptr initialisieren
 			};
 
-			ListNode<T>* insert = insert_node;
-
-			//Zeiger zw. neuem und altem element
+			//Zeiger von old zu neuem element
 			old->m_prev = insert;
-			insert->m_next = old;
 
-			//Zeiger zwischen prev element und insert
+			//Zeiger von prev zu neuem element
 			prev->m_next = insert;
-			insert->m_prev = prev;
 
 			++ m_size;
 		}
@@ -501,7 +491,6 @@ class List
 		//temp Liste mit gleicher Groesse
 		int x = size();
 		List<T> temp{x};
-		temp.print();
 
 		//Iterator auf erstes this element, und auf letztes temp el
 		iterator first = this->begin();
@@ -509,21 +498,12 @@ class List
 		
 		while(first != nullptr)
 		{
-			std::cout << *second << "=" << *first << "\n";
 			*second = *first;
-			std::cout << *second << "=" << *first << "\n";
-
 			++first;
 			--second;
 		}
 
-		std::cout << "this: ";
-		print();
-
-		std::cout << "\ntemp:";
-		temp.print();
-
-		*this = temp;
+		*this = temp; 
 	}
 
 	void print () const

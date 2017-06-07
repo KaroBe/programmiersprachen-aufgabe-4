@@ -112,7 +112,21 @@ TEST_CASE("iterator initializations", "[ListIterator]")
 	REQUIRE(*it_begin == 1);
 
 	ListIterator<int> it_end {list.end()};
-	REQUIRE(*it_end == 3);
+	REQUIRE(it_end == nullptr);
+}
+
+TEST_CASE("PRE and POST Increment of Iterator", "[ListIterator]")
+{
+	List<int> list (std::vector<int> {1,2,3,4});
+
+	auto it = list.begin();
+	REQUIRE(*it == 1);
+	++it;
+	REQUIRE(*it == 2);
+	auto second = it++;
+	REQUIRE(*second == 2);
+	REQUIRE(*it == 3);
+
 }
 
 TEST_CASE("operator-> test", "[ListIterator]")
@@ -124,8 +138,11 @@ TEST_CASE("operator-> test", "[ListIterator]")
 
 	auto it2 = circle_list.begin();
 
+	Circle c1 = *it2;
 	int x = it2->m_radius;
+	int y = (*it2).m_radius;
 	REQUIRE(x == 5);
+	REQUIRE(y == 5);
 
 	it2->warp();
 	REQUIRE(it2->m_radius == 0);
@@ -141,7 +158,7 @@ TEST_CASE("should be a empty range after default construction", "[iterators]")
 	REQUIRE(b == e);
 
 	list.push_front(5);
-	e = list.end();
+	b = list.begin();
 	REQUIRE(b != e);
 }
 
@@ -183,12 +200,41 @@ TEST_CASE ("copy construction of list", "[constructor]")
 TEST_CASE ("insert method", "[list]")
 {
 	List<int> list (std::vector<int> {1,2,3});
-	auto it = list.begin();
-	list.insert(it,5);
+	
+	//EINFÜGEN AM ANFANG
+	ListIterator<int> pos_begin = list.begin(); //pushFront
+	list.insert(pos_begin,5);
 	REQUIRE(*list.begin() == 5);
-	REQUIRE(*it == 1);
-	++it;
-	REQUIRE(*it == 2);
+	REQUIRE(*pos_begin == 1); //neues El wird VOR iterator eingefügt
+	
+
+	//EINFÜGEN AM ENDE
+	ListIterator<int> pos_end = list.end();
+	REQUIRE(pos_end == nullptr);
+	list.insert(pos_end,6);
+
+	//EINFÜGEN IN DER MITTE
+	ListIterator<int> pos_mid = list.begin();
+	++pos_mid;
+	
+	std::cout << "vorher: \n";
+	list.print();
+	
+	list.insert(pos_mid,10);
+	
+	std::cout << "nachher: \n";
+	list.print();
+
+	REQUIRE(*pos_mid == 1);
+	--pos_mid;
+	REQUIRE(*pos_mid == 10);
+	
+	//LEERE LISTE
+	List<int> list2 (std::vector<int> {});
+	ListIterator<int> empty_it = list2.begin();
+	list2.insert(empty_it,5);
+	REQUIRE(*list2.begin() == 5);
+
 }
 
 // AUFGABE 4.10
@@ -197,7 +243,6 @@ TEST_CASE ("reverse method","[list]")
 {
 	List<int> list (std::vector<int> {1,2,3});
 
-	std::cout << "size: " << list.size() << "\n";
 	list.reverse();
 	REQUIRE(*list.begin() == 3);
 
@@ -206,6 +251,25 @@ TEST_CASE ("reverse method","[list]")
 	REQUIRE(*list.begin() == 1);
 	*/
 }
+
+// AUFGABE 4.11
+
+TEST_CASE("std::copy with own iterator implementation", "[list]")
+{
+	List<int> list {std::vector<int> {1,2,3}};
+	int x = list.size();
+	List<int> target {x};
+
+	target.print();
+
+	std::copy(list.begin(), list.end(), target.begin());
+	
+	list.print();
+	
+	target.print();
+	
+	REQUIRE(list == target);
+ }
 
 int main(int argc, char* argv[])
 {
