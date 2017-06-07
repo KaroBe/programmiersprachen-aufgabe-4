@@ -65,7 +65,7 @@ struct ListIterator
 	ListIterator () {}
 
 	//custom
-	ListIterator(ListNode<T>* n) : m_node(n) {}	
+	ListIterator(ListNode<T>* n) : m_node(n) {}
 
 	//copy
 	ListIterator(ListIterator<T> const& origin) : m_node(origin.m_node) {}
@@ -83,9 +83,9 @@ struct ListIterator
 		return &(m_node->m_value);
 	}
 
-
 	// returns reference to ListIterator<T>
 	// increment iterator
+	// pre
 	Self& operator++()
 	{
 		//next() returns new ListIterator
@@ -253,6 +253,7 @@ class List
 	List(List<T>&& source) :
 		m_first{source.m_first},
 		m_last{source.m_last},
+
 		m_size{source.size()}
 	{
 		source.m_first = nullptr; //source now empty
@@ -354,13 +355,14 @@ class List
 
 	//removes front element of list and returns
 	//it's value
-	value_type pop_front()
+	void pop_front()
 	{
 		//List empty
 		if (m_size == 0)
 		{
 			//ERROR???
 		}
+
 		//List has one element
 		else if (m_size == 1)
 		{
@@ -370,10 +372,12 @@ class List
 			m_first = nullptr;
 			m_last = nullptr;
 
+			delete former_first;
+			former_first = nullptr;
+
 			--m_size;
-			return former_first->m_value;
-			
 		}
+
 		//List has multiple elements
 		else
 		{				
@@ -387,19 +391,16 @@ class List
 			//das prev element von front wird auf nullptr umgebogen
 			m_first->m_prev = nullptr;
 
-			/*
 			delete former_first;
 			former_first = nullptr;
-			*/
 
 			-- m_size;
-			return former_first->m_value;
 		}
 	}
 	
 	//removes front element of list and returns
 	//it's value
-	value_type pop_back()
+	void pop_back()
 	{
 		//List empty
 		if (m_size == 0)
@@ -409,7 +410,7 @@ class List
 		//List has one element
 		else if (m_size == 1)
 		{
-			return pop_front();	
+			pop_front();	
 		}
 		//List has multiple elements
 		else
@@ -424,13 +425,10 @@ class List
 			//das prev element von front wird auf nullptr umgebogen
 			m_last->m_next = nullptr;
 
-			/*
-			delete former_first;
-			former_first = nullptr;
-			*/
-
+			delete former_last;
+			former_last = nullptr;
+			
 			-- m_size;
-			return former_last->m_value;
 		}
 	}
 	
@@ -470,7 +468,6 @@ class List
 
 	void insert (iterator it, const T& obj)
 	{
-
 		if (m_size == 0)
 			push_front(obj);
 

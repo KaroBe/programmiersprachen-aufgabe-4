@@ -14,7 +14,6 @@ TEST_CASE("empty", "[List]")
 	//List<int> l3 = new List<int>{params...}
 
 	REQUIRE(true == l1.empty());
-
 }
 
 TEST_CASE("size", "[List]")

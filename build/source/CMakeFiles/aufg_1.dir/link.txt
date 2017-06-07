@@ -1,1 +1,1 @@
-/usr/bin/c++   -std=c++11   CMakeFiles/aufg_1.dir/aufg_1.cpp.o  -o aufg_1 -rdynamic 
+/usr/bin/c++   -std=c++11 -g   CMakeFiles/aufg_1.dir/aufg_1.cpp.o  -o aufg_1 -rdynamic 
