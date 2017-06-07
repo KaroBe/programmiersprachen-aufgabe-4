@@ -209,12 +209,12 @@ class List
 				{}
 
 	//Construct from vector
-	List(std::vector<value_type> const& values) :
+	List(std::vector<T> const& values) :
 				m_size{0},
 				m_first{nullptr},
 				m_last{nullptr}
 	{
-		for (value_type value : values)
+		for (T value : values)
 			push_back(value);
 	}
 
@@ -265,16 +265,14 @@ class List
 	~List(){clear();}
 
 	//Zuweisungsopertor
-	List& operator=(List rhs)
+	List& operator=(List<T> const& source)
 	{
-		swap(rhs);
-		return *this;
-	}
+		List<T> rhs {source};
+		
+		std::swap(rhs.m_first, m_first);
+		std::swap(rhs.m_last, m_last);
 
-	void swap(List & rhs)
-	{
-		std::swap(m_first, rhs.m_first);
-		std::swap(m_last, rhs.m_last);
+		return *this;
 	}
 
 	//returns whether list is empty
@@ -290,7 +288,7 @@ class List
 	}
 
 	//pushs element to front of list
-	void push_front(value_type value)
+	void push_front(const T& value)
 	{
 		//List empty
 		if (m_size == 0)
@@ -331,7 +329,7 @@ class List
 	}
 
 	//pushs element to back of list
-	void push_back(value_type value)
+	void push_back(const T& value)
 	{
 		//List empty
 		if (m_size == 0)
